@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const { registerUserController, logoutUserController, loginUserController } = require('../controllers/authControllers')
-
-router.post('/register', registerUserController)
-router.post('/login', loginUserController)
-router.post('/logout', logoutUserController)
+const errorMiddleware = require('../middlewares/errorMiddleware')
+router.post('/register', registerUserController, errorMiddleware)
+router.post('/login', loginUserController, errorMiddleware)
+router.post('/logout', logoutUserController, errorMiddleware)
 
 
 
