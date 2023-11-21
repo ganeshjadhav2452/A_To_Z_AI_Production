@@ -13,7 +13,9 @@ connectDatabase()
 
 //intilizing app
 const app = express()
-app.use(cors())
+app.use(cors({
+    origin: "https://a-to-z-ai-production.vercel.app"
+}))
 app.use(express.json())
 app.use(morgan('dev'))
 app.use(errorHandler)
