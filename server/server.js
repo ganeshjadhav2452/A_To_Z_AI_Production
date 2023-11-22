@@ -25,7 +25,7 @@ app.use(express.json())
 app.use(morgan('dev'))
 app.use(errorHandler)
 
-app.use('/test', async (req, res) => {
+app.use('*', async (req, res, next) => {
     res.setHeader('Access-Control-Allow-Credentials', true)
     res.setHeader('Access-Control-Allow-Origin', '*')
     // another common pattern
@@ -36,10 +36,9 @@ app.use('/test', async (req, res) => {
         'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
     )
     if (req.method === 'OPTIONS') {
-        res.status(200).end()
-        return
+        next()
     }
-    return await fn(req, res)
+
 }
 
 
