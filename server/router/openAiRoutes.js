@@ -5,11 +5,11 @@ const { paragraphController,
     jsconverterController,
     summaryController } = require('../controllers/openAiControllers')
 const errorMiddleware = require('../middlewares/errorMiddleware')
-const allowCors = require('../server')
+
 const router = express.Router()
-const allowCors = require('../middlewares/allowCors')
+
 //route
-router.post("/summary", allowCors, allowCors(summaryController), errorMiddleware);
+router.post("/summary", summaryController, errorMiddleware);
 router.post("/paragraph", paragraphController, errorMiddleware);
 router.post("/chatbot", chatbotController, errorMiddleware);
 router.post("/js-converter", jsconverterController, errorMiddleware);
