@@ -29,10 +29,10 @@ app.use(errorHandler)
 
 
 
-// app.use('*', (req, res) => {
+app.use('*', (req, res) => {
 
-//     res.sendFile(path.join(__dirname, '../client/build/index.html'))
-// })
+    res.sendFile(path.join(__dirname, '../client/build/index.html'))
+})
 
 
 // REST API Routes
