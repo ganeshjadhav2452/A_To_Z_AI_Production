@@ -28,12 +28,11 @@ app.use(errorHandler)
 
 
 
+app.use(express.static(path.join(__dirname, '../client/build')))
 
-// app.use('*', (req, res) => {
-//     console.log('request received from ', req.url)
-//     res.sendFile(path.join(__dirname, '../client/build/index.html'))
-// })
-
+app.use('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build/index.html'))
+})
 
 // REST API Routes
 app.use('/api/v1/auth/', authRoutes)
