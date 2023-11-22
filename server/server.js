@@ -12,18 +12,18 @@ connectDatabase()
 
 
 const corsOptions = {
-    origin: 'https://a-to-z-ai-production-azxe.vercel.app', // Replace with your frontend URL
+    origin: '*', // Replace with your frontend URL
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // Enable credentials (if needed)
-    optionsSuccessStatus: 200 // Some legacy browsers choke on 204
+    optionsSuccessStatus: 200, // Some legacy browsers choke on 204
 };
 
 //intilizing app
 const app = express()
-app.use(cors(corsOptions))
 app.use(express.json())
 app.use(morgan('dev'))
 app.use(errorHandler)
+app.use(cors(corsOptions))
 
 //deployment code for sending frontend
 
