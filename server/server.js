@@ -30,7 +30,7 @@ app.use(errorHandler)
 
 
 app.use('*', (req, res) => {
-
+    console.log('request received from ', req.url)
     res.sendFile(path.join(__dirname, '../client/build/index.html'))
 })
 
