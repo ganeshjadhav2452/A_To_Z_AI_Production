@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 
     if (req.method === 'OPTIONS') {
         // Handling preflight requests
-        res.sendStatus(200);
+        res.sendStatus(200).end();
     } else {
         next();
     }
