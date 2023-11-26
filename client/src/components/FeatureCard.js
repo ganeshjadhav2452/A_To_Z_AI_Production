@@ -1,24 +1,14 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import DescriptionRounded from "@mui/icons-material/DescriptionRounded";
-import FormatAlignLeftOutlined from "@mui/icons-material/FormatAlignLeftOutlined";
-import ChatRounded from "@mui/icons-material/ChatRounded";
-import '../index.css'
 
 
 
 
 const FeatureCard = ({ featureHeading, featureSubHeading, featureDescription, path, icon }) => {
     const navigate = useNavigate()
-
-    const icons = {
-        DescriptionRounded,
-        FormatAlignLeftOutlined,
-        ChatRounded
-
-    };
-
     const IconComponent = icon;
+
+
 
     return (
         <>
