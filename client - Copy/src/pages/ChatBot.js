@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import toast from "react-hot-toast";
+import axios from "axios";
 import {
     Box,
     Typography,
@@ -12,27 +13,34 @@ import {
     Collapse,
     Card,
 } from "@mui/material";
-import useCallApi from "../customHooks/useCallApi";
 
 const ChatBot = () => {
-    const [response, apiCallHandler, error] = useCallApi("");
     const theme = useTheme();
     const navigate = useNavigate();
     //media
     const isNotMobile = useMediaQuery("(min-width: 1000px)");
     // states
     const [text, settext] = useState("");
+    const [response, setResponse] = useState("");
+    const [error, setError] = useState("");
 
     //register ctrl
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-
-            apiCallHandler("/api/v1/openai/chatbot", text)
-
+            const { data } = await axios.post("https://atozai.adaptable.app/api/v1/openai/chatbot", { text });
+            console.log(data);
+            setResponse(data);
         } catch (err) {
-            console.log(err);
-
+            console.log(error);
+            if (err.response.data.error) {
+                setError(err.response.data.error);
+            } else if (err.message) {
+                setError(err.message);
+            }
+            setTimeout(() => {
+                setError("");
+            }, 5000);
         }
     };
     return (

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import toast from "react-hot-toast";
+import axios from "axios";
 import {
     Box,
     Typography,
@@ -12,27 +13,34 @@ import {
     Collapse,
     Card,
 } from "@mui/material";
-import useCallApi from "../customHooks/useCallApi";
 
-const ChatBot = () => {
-    const [response, apiCallHandler, error] = useCallApi("");
+const Summary = () => {
     const theme = useTheme();
     const navigate = useNavigate();
     //media
     const isNotMobile = useMediaQuery("(min-width: 1000px)");
     // states
     const [text, settext] = useState("");
+    const [summary, setSummary] = useState("");
+    const [error, setError] = useState("");
 
     //register ctrl
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-
-            apiCallHandler("/api/v1/openai/chatbot", text)
-
+            const { data } = await axios.post("https://atozai.adaptable.app/api/v1/openai/summary", { text });
+            console.log(data);
+            setSummary(data);
         } catch (err) {
-            console.log(err);
-
+            console.log(error);
+            if (err.response.data.error) {
+                setError(err.response.data.error);
+            } else if (err.message) {
+                setError(err.message);
+            }
+            setTimeout(() => {
+                setError("");
+            }, 5000);
         }
     };
     return (
@@ -50,7 +58,7 @@ const ChatBot = () => {
                 </Alert>
             </Collapse>
             <form onSubmit={handleSubmit}>
-                <Typography variant="h3">Ask with Chatbot</Typography>
+                <Typography variant="h3">Summarize Text</Typography>
 
                 <TextField
                     placeholder="add your text"
@@ -72,14 +80,14 @@ const ChatBot = () => {
                     size="large"
                     sx={{ color: "white", mt: 2 }}
                 >
-                    Chat
+                    Submit
                 </Button>
                 <Typography mt={2}>
                     not this tool ? <Link to="/">GO BACK</Link>
                 </Typography>
             </form>
 
-            {response ? (
+            {summary ? (
                 <Card
                     sx={{
                         mt: 4,
@@ -91,7 +99,7 @@ const ChatBot = () => {
                         bgcolor: "background.default",
                     }}
                 >
-                    <Typography p={2}>{response}</Typography>
+                    <Typography p={2}>{summary}</Typography>
                 </Card>
             ) : (
                 <Card
@@ -114,7 +122,7 @@ const ChatBot = () => {
                             lineHeight: "450px",
                         }}
                     >
-                        Bot Response
+                        Summary Will Apprea Here
                     </Typography>
                 </Card>
             )}
@@ -122,4 +130,4 @@ const ChatBot = () => {
     );
 };
 
-export default ChatBot;
+export default Summary;

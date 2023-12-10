@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import toast from "react-hot-toast";
+import axios from "axios";
 import {
     Box,
     Typography,
@@ -12,27 +13,36 @@ import {
     Collapse,
     Card,
 } from "@mui/material";
-import useCallApi from "../customHooks/useCallApi";
 
-const ChatBot = () => {
-    const [response, apiCallHandler, error] = useCallApi("");
+const JsConverter = () => {
     const theme = useTheme();
     const navigate = useNavigate();
     //media
     const isNotMobile = useMediaQuery("(min-width: 1000px)");
     // states
     const [text, settext] = useState("");
+    const [code, setCode] = useState("");
+    const [error, setError] = useState("");
 
     //register ctrl
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-
-            apiCallHandler("/api/v1/openai/chatbot", text)
-
+            const { data } = await axios.post("https://atozai.adaptable.app/api/v1/openai/js-converter", {
+                text,
+            });
+            console.log(data);
+            setCode(data);
         } catch (err) {
-            console.log(err);
-
+            console.log(error);
+            if (err.response.data.error) {
+                setError(err.response.data.error);
+            } else if (err.message) {
+                setError(err.message);
+            }
+            setTimeout(() => {
+                setError("");
+            }, 5000);
         }
     };
     return (
@@ -50,7 +60,7 @@ const ChatBot = () => {
                 </Alert>
             </Collapse>
             <form onSubmit={handleSubmit}>
-                <Typography variant="h3">Ask with Chatbot</Typography>
+                <Typography variant="h3">JS Converter</Typography>
 
                 <TextField
                     placeholder="add your text"
@@ -72,14 +82,14 @@ const ChatBot = () => {
                     size="large"
                     sx={{ color: "white", mt: 2 }}
                 >
-                    Chat
+                    Convert
                 </Button>
                 <Typography mt={2}>
                     not this tool ? <Link to="/">GO BACK</Link>
                 </Typography>
             </form>
 
-            {response ? (
+            {code ? (
                 <Card
                     sx={{
                         mt: 4,
@@ -89,9 +99,12 @@ const ChatBot = () => {
                         borderRadius: 5,
                         borderColor: "natural.medium",
                         bgcolor: "background.default",
+                        overflow: "auto",
                     }}
                 >
-                    <Typography p={2}>{response}</Typography>
+                    <pre>
+                        <Typography p={2}>{code}</Typography>
+                    </pre>
                 </Card>
             ) : (
                 <Card
@@ -114,7 +127,7 @@ const ChatBot = () => {
                             lineHeight: "450px",
                         }}
                     >
-                        Bot Response
+                        Your Code Will Apprea Here
                     </Typography>
                 </Card>
             )}
@@ -122,4 +135,4 @@ const ChatBot = () => {
     );
 };
 
-export default ChatBot;
+export default JsConverter;

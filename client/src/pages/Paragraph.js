@@ -13,34 +13,29 @@ import {
     Collapse,
     Card,
 } from "@mui/material";
+import useCallApi from "../customHooks/useCallApi";
 
 const Paragraph = () => {
+    const [para, apiCallHandler, error] = useCallApi("");
     const theme = useTheme();
     const navigate = useNavigate();
     //media
     const isNotMobile = useMediaQuery("(min-width: 1000px)");
     // states
     const [text, settext] = useState("");
-    const [para, setPara] = useState("");
-    const [error, setError] = useState("");
+
+
 
     //register ctrl
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const { data } = await axios.post("https://atozai.adaptable.app/api/v1/openai/paragraph", { text });
-            console.log(data);
-            setPara(data);
+
+            apiCallHandler("/api/v1/openai/paragraph", text)
+
         } catch (err) {
-            console.log(error);
-            if (err.response.data.error) {
-                setError(err.response.data.error);
-            } else if (err.message) {
-                setError(err.message);
-            }
-            setTimeout(() => {
-                setError("");
-            }, 5000);
+            console.log(err);
+
         }
     };
     return (

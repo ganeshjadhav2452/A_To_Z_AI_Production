@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
-import axios from "axios";
+import { Link } from "react-router-dom";
+
 import {
     Box,
     Typography,
@@ -13,34 +12,29 @@ import {
     Collapse,
     Card,
 } from "@mui/material";
+import useCallApi from "../customHooks/useCallApi";
 
 const Summary = () => {
+    console.log('summary component rendered')
+    // useCallApi is a custome hook used for api calling instead of repeating the logic again and again
+    const [apiData, apiCallHandler, error] = useCallApi("");
     const theme = useTheme();
-    const navigate = useNavigate();
+
     //media
     const isNotMobile = useMediaQuery("(min-width: 1000px)");
     // states
     const [text, settext] = useState("");
-    const [summary, setSummary] = useState("");
-    const [error, setError] = useState("");
 
-    //register ctrl
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const { data } = await axios.post("https://atozai.adaptable.app/api/v1/openai/summary", { text });
-            console.log(data);
-            setSummary(data);
+            apiCallHandler("/api/v1/openai/summary", text);
+
+
         } catch (err) {
-            console.log(error);
-            if (err.response.data.error) {
-                setError(err.response.data.error);
-            } else if (err.message) {
-                setError(err.message);
-            }
-            setTimeout(() => {
-                setError("");
-            }, 5000);
+            console.log(err);
         }
     };
     return (
@@ -87,7 +81,7 @@ const Summary = () => {
                 </Typography>
             </form>
 
-            {summary ? (
+            {apiData ? (
                 <Card
                     sx={{
                         mt: 4,
@@ -99,7 +93,7 @@ const Summary = () => {
                         bgcolor: "background.default",
                     }}
                 >
-                    <Typography p={2}>{summary}</Typography>
+                    <Typography p={2}>{apiData}</Typography>
                 </Card>
             ) : (
                 <Card

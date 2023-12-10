@@ -10,6 +10,7 @@ const summaryController = async (req, res) => {
 
     try {
         const { text } = req.body;
+        console.log('this is recieved text', text)
         const { data } = await openai.createCompletion({
             model: "text-davinci-003",
             prompt: `Summarize this \n${text}`,

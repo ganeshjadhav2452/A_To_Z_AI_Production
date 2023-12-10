@@ -13,36 +13,24 @@ import {
     Collapse,
     Card,
 } from "@mui/material";
+import useCallApi from "../customHooks/useCallApi";
 
 const JsConverter = () => {
     const theme = useTheme();
-    const navigate = useNavigate();
+    const [code, apiCallHandler, error] = useCallApi("");
     //media
     const isNotMobile = useMediaQuery("(min-width: 1000px)");
     // states
     const [text, settext] = useState("");
-    const [code, setCode] = useState("");
-    const [error, setError] = useState("");
+    // const [code, setCode] = useState("");
 
     //register ctrl
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const { data } = await axios.post("https://atozai.adaptable.app/api/v1/openai/js-converter", {
-                text,
-            });
-            console.log(data);
-            setCode(data);
+            apiCallHandler("/api/v1/openai/js-converter", text);
         } catch (err) {
-            console.log(error);
-            if (err.response.data.error) {
-                setError(err.response.data.error);
-            } else if (err.message) {
-                setError(err.message);
-            }
-            setTimeout(() => {
-                setError("");
-            }, 5000);
+            console.log(err);
         }
     };
     return (
